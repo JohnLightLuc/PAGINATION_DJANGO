@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form method='POST' action ="{% url 'pageapp:home' %}">
+        {% csrf_token %}
+        <input type="text" name='rech' id='rech'>
+        <input type="submit" value='recherche'>
+    </form>
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Contact</th>
+        </tr>
+        {% if contacts|length > 0 %}
+            {% for contact in contacts %}
+                <tr>
+                    <td>{{contact.nom|truncatewords:'2' }}</td>
+                    <td>{{contact.prenom|truncatewords:'2'}}</td>
+                    <td>{{contact.tel |truncatewords:'2'}}</td>                
+                </tr>
+            {% endfor %}
+        {% endif %}
+        
+        
+    </table>
+    {% if contacts.has_previous %} 
+        <a href="?page={{ contacts.previous_page_number }}">&lt; Previous</a>
+    {% endif %}
+    {% for i  in list_page  %}
+    {% if forloop.counter <= 4 %}
+        <a href="?page={{ i }}"><button>{{ i }}</button></a>
+    {% endif %}
+    {% endfor %}
+    page {{contacts.number}} of {{contacts.paginator.num_pages}}
+    {% if contacts.has_next %}
+        <a href="?page={{ contacts.next_page_number }}">&gt; Next</a>
+    {% endif %} 
+    
+</body>
+</html>
