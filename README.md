@@ -78,5 +78,5 @@ Porpirétés et Methodes
              Source : https://docs.djangoproject.com/fr/2.2/topics/pagination/#id2
              
           
-## Liens
+
 Partgage d'artticle sur les resau sociaux: https://pypi.org/project/django-social-share/
