@@ -77,6 +77,66 @@ Porpirétés et Methodes
              
              Source : https://docs.djangoproject.com/fr/2.2/topics/pagination/#id2
              
-          
+   
+## Pratique 
+ 
+ views.py
+ 
+    def model(request):
+    
+            if request.POST :
+                recherche = request.POST.get('search')
+                models = Model.objects.all().filter(nom__icontains= recherche).order_by('nom')
+            else:
+                models = Model.objects.filter(status=True).order_by('nom')
+                paginator = Paginator(models, 2)
+                page = request.GET.get('page')
+            try:
+                datas = paginator.get_page(page)
+            except EmptyPage:
+                datas = paginator(1)
+            except PageNotAnInteger:
+                datas = paginator(paginator.num_pages)
+            data  = {
+                'datas': datas,
+            }
+            return render(request, 'pages/index.html', data)
+ 
+ 
+ index.html
+ 
+        <div class="block-27">
+          <ul>
+            {% if mymodels.has_previous %}
+            <li>
+                <a href="?page=1">&laquo; </a>
+            </li>
+            ...
+            <li>
+                <a href="?page={{ datas.previous_page_number }}">&lt;</a>
+              </li>
+            <li>
+              <a href="?page={{ datas.previous_page_number }}">{{ datas.previous_page_number }}</a>
+            </li>
+            {% endif %}
+            <li class="active">
+                <a href="?page={{ datas.number }}">{{ mymodels.number }}</a>
+            </li>
+            {% if mymodels.has_next %}
+            <li>
+              <a href="?page={{ datas.next_page_number }}">{{ datas.next_page_number }}</a>
+            </li>
+            <li>
+                <a href="?page={{ datas.next_page_number }}">&gt;</a>
+              </li>
+            ...
+            <li>
+                <a href="?page={{ datas.paginator.num_pages }}">&raquo;</a>
+            </li>
+            {% endif %}
+          </ul>
+          <p> Page {{ datas.number }} / {{ datas.paginator.num_pages }} </p>
+        </div>
+ 
 
 Partgage d'artticle sur les resau sociaux: https://pypi.org/project/django-social-share/
