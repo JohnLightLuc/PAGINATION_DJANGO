@@ -82,6 +82,8 @@ Porpirétés et Methodes
  
  views.py
  
+    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+    ....
     def model(request):
     
             if request.POST :
